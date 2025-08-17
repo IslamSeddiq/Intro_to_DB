@@ -1,7 +1,7 @@
 import mysql.connector
 
 # Connect to MySQL server
-conn = mysql.connector.connect(
+mydb = mysql.connector.connect(
     host="localhost",       # Change if needed
     user="root",            # Your MySQL username
     password="root",    # Your MySQL password
@@ -15,7 +15,7 @@ cursor.execute("""
 CREATE TABLE IF NOT EXISTS Authors (
     author_id INT PRIMARY KEY,
     author_name VARCHAR(215)
-);
+)
 """)
 
 # Create Books table
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS Books (
     publication_date DATE,
     author_id INT,
     FOREIGN KEY (author_id) REFERENCES Authors(author_id)
-);
+)
 """)
 
 # Create Customers table
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS Customers (
     customer_name VARCHAR(215),
     email VARCHAR(215),
     address TEXT
-);
+)
 """)
 
 # Create Orders table
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS Orders (
     customer_id INT,
     order_date DATE,
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
-);
+)
 """)
 
 # Create Order_Details table
@@ -59,13 +59,11 @@ CREATE TABLE IF NOT EXISTS Order_Details (
     quantity INT,
     FOREIGN KEY (book_id) REFERENCES Books(book_id),
     FOREIGN KEY (order_id) REFERENCES Orders(order_id)
-);
+)
 """)
 
-print("✅ Database and tables created successfully!")
+print("Database and tables created successfully!")
 
 # Close connection
 cursor.close()
-conn.close()
-
-
+mydb.close()
