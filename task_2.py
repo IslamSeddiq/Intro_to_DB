@@ -5,10 +5,11 @@ mydb = mysql.connector.connect(
     host="localhost",       # Change if needed
     user="root",            # Your MySQL username
     password="root",    # Your MySQL password
-    database = "alx_book_store"
+    database ="alx_book_store"
 )
 
 cursor = mydb.cursor()
+cursor.execute("USE alx_book_store;")
 
 # Create Authors table
 cursor.execute("""
