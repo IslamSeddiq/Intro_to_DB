@@ -1,85 +1,72 @@
 import mysql.connector
-from mysql.connector import Error
 
-def create_tables():
-    connection = None
-    try:
-        # Connect to MySQL
-        connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="root",
-            database="alx_book_store"
-        )
+# Connect to MySQL server
+conn = mysql.connector.connect(
+    host="localhost",       # Change if needed
+    user="root",            # Your MySQL username
+    password="yourpassword" # Your MySQL password
+)
 
-        if connection.is_connected():
-            cursor = connection.cursor()
+cursor = conn.cursor()
 
-            # Authors table first (referenced by Books)
-            cursor.execute("""
-            CREATE TABLE IF NOT EXISTS Authors(
-                author_id INT PRIMARY KEY,
-                author_name VARCHAR(215)
-            )
-            """)
-            print("Table 'Authors' created successfully!")
+# Create database
+cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store;")
+cursor.execute("USE alx_book_store;")
 
-            # Books table
-            cursor.execute("""
-            CREATE TABLE IF NOT EXISTS Books(
-                book_id INT PRIMARY KEY,
-                title VARCHAR(130),
-                price DOUBLE,
-                publication_date DATE,
-                author_id INT,
-                FOREIGN KEY (author_id) REFERENCES Authors(author_id)
-            )
-            """)
-            print("Table 'Books' created successfully!")
+# Create Authors table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS Authors (
+    author_id INT PRIMARY KEY,
+    author_name VARCHAR(215)
+);
+""")
 
-            # Customers table
-            cursor.execute("""
-            CREATE TABLE IF NOT EXISTS Customers(
-                customer_id INT PRIMARY KEY,
-                customer_name VARCHAR(215),
-                email VARCHAR(215),
-                address TEXT
-            )
-            """)
-            print("Table 'Customers' created successfully!")
+# Create Books table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS Books (
+    book_id INT PRIMARY KEY,
+    title VARCHAR(130),
+    price DECIMAL(10,2),
+    publication_date DATE,
+    author_id INT,
+    FOREIGN KEY (author_id) REFERENCES Authors(author_id)
+);
+""")
 
-            # Orders table
-            cursor.execute("""
-            CREATE TABLE IF NOT EXISTS Orders(
-                order_id INT PRIMARY KEY,
-                customer_id INT,
-                order_date DATE,
-                FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
-            )
-            """)
-            print("Table 'Orders' created successfully!")
+# Create Customers table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS Customers (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(215),
+    email VARCHAR(215),
+    address TEXT
+);
+""")
 
-            # Order_Details table
-            cursor.execute("""
-            CREATE TABLE IF NOT EXISTS Order_Details(
-                orderdetailid INT PRIMARY KEY,
-                book_id INT,
-                order_id INT,
-                quantity DOUBLE,
-                FOREIGN KEY (book_id) REFERENCES Books(book_id),
-                FOREIGN KEY (order_id) REFERENCES Orders(order_id)
-            )
-            """)
-            print("Table 'Order_Details' created successfully!")
+# Create Orders table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS Orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    order_date DATE,
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+);
+""")
 
-    except Error as e:
-        print(f"Error: {e}")
+# Create Order_Details table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS Order_Details (
+    orderdetailid INT PRIMARY KEY,
+    book_id INT,
+    order_id INT,
+    quantity INT,
+    FOREIGN KEY (book_id) REFERENCES Books(book_id),
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+);
+""")
 
-    finally:
-        if connection is not None and connection.is_connected():
-            cursor.close()
-            connection.close()
-            print("MySQL connection closed.")
+print("✅ Database and tables created successfully!")
 
-# Run function
-create_tables()
+# Close connection
+cursor.close()
+conn.close()
