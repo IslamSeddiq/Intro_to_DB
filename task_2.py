@@ -4,14 +4,11 @@ import mysql.connector
 conn = mysql.connector.connect(
     host="localhost",       # Change if needed
     user="root",            # Your MySQL username
-    password="yourpassword" # Your MySQL password
+    password="root"    # Your MySQL password
+    DATABASE = "alx_book_store"
 )
 
-cursor = conn.cursor()
-
-# Create database
-cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store;")
-cursor.execute("USE alx_book_store;")
+cursor = mydb.cursor()
 
 # Create Authors table
 cursor.execute("""
@@ -70,3 +67,4 @@ print("✅ Database and tables created successfully!")
 # Close connection
 cursor.close()
 conn.close()
+
