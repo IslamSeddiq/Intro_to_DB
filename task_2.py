@@ -4,8 +4,8 @@ import mysql.connector
 conn = mysql.connector.connect(
     host="localhost",       # Change if needed
     user="root",            # Your MySQL username
-    password="root"    # Your MySQL password
-    DATABASE = "alx_book_store"
+    password="root",    # Your MySQL password
+    database = "alx_book_store"
 )
 
 cursor = mydb.cursor()
@@ -67,4 +67,5 @@ print("✅ Database and tables created successfully!")
 # Close connection
 cursor.close()
 conn.close()
+
 
